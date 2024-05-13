@@ -1,5 +1,5 @@
 use crate::ctx::Ctx;
-use crate::model::ModelController;
+use crate::model::ModelManager;
 use crate::web::AUTH_TOKEN;
 use crate::{Error, Result};
 use async_trait::async_trait;
@@ -25,7 +25,7 @@ pub async fn mw_require_auth<B>(
 }
 
 pub async fn mw_ctx_resolver<B>(
-	_mc: State<ModelController>,
+	_mc: State<ModelManager>,
 	cookies: Cookies,
 	mut req: Request<B>,
 	next: Next<B>,

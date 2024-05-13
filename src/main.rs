@@ -1,20 +1,19 @@
 // #![allow(unused)] // For beginning only.
 
-pub use self::error::{Error, Result};
+mod config;
+mod ctx;
+mod error;
+mod log;
+mod model;
+mod web;
 
-use crate::model::ModelController;
+pub use self::error::{Error, Result};
 
 use axum::{middleware, Router};
 use std::net::SocketAddr;
 use tower_cookies::CookieManagerLayer;
 use tracing::info;
 use tracing_subscriber::EnvFilter;
-
-mod ctx;
-mod error;
-mod log;
-mod model;
-mod web;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -24,20 +23,17 @@ async fn main() -> Result<()> {
 		.with_env_filter(EnvFilter::from_default_env())
 		.init();
 
-	// Initialize ModelController.
-	let mc = ModelController::new().await?;
-
-	let routes_apis = web::routes_tickets::routes(mc.clone())
-		.route_layer(middleware::from_fn(web::mw_auth::mw_require_auth));
+	// Initialize ModelManager.
+	let mm = model::ModelManager::new().await;
 
 	let routes_all = Router::new()
 		.merge(web::routes_login::routes())
-		.nest("/api", routes_apis)
+		// .nest("/api", routes_apis)
 		.layer(middleware::map_response(
 			web::mw_res_map::main_response_mapper,
 		))
 		.layer(middleware::from_fn_with_state(
-			mc.clone(),
+			mm.clone(),
 			web::mw_auth::mw_ctx_resolver,
 		))
 		.layer(CookieManagerLayer::new())
