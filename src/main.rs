@@ -1,5 +1,7 @@
 // #![allow(unused)] // For beginning only.
 
+// #[cfg(test)]
+mod _dev_util;
 mod config;
 mod ctx;
 mod error;
@@ -23,6 +25,9 @@ async fn main() -> Result<()> {
 		.with_target(false)
 		.with_env_filter(EnvFilter::from_default_env())
 		.init();
+
+	// For dev only
+	_dev_util::init_dev().await;
 
 	// Initialize ModelManager.
 	let mm = model::ModelManager::new().await;

@@ -26,6 +26,13 @@ uuid = { version = "1", features = ["v4", "fast-rng"] }
 # tracing
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+# DB
+sqlx = { version = "0.6", features = [
+  "runtime-tokio-rustls",
+  "postgres",
+  "uuid",
+  "time",
+] }
 
 
 [dev-dependencies]
