@@ -10,6 +10,7 @@ mod web;
 pub use self::error::{Error, Result};
 
 use axum::{middleware, Router};
+use config::config;
 use std::net::SocketAddr;
 use tower_cookies::CookieManagerLayer;
 use tracing::info;
@@ -37,7 +38,7 @@ async fn main() -> Result<()> {
 			web::mw_auth::mw_ctx_resolver,
 		))
 		.layer(CookieManagerLayer::new())
-		.fallback_service(web::routes_static::routes_static());
+		.fallback_service(web::routes_static::serve_dir());
 
 	// region:    --- Start Server
 	let addr = SocketAddr::from(([127, 0, 0, 1], 8080));

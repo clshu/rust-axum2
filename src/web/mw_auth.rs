@@ -12,7 +12,7 @@ use lazy_regex::regex_captures;
 use tower_cookies::{Cookie, Cookies};
 use tracing::debug;
 
-pub async fn mw_require_auth<B>(
+pub async fn _mw_require_auth<B>(
 	ctx: Result<Ctx>,
 	req: Request<B>,
 	next: Next<B>,

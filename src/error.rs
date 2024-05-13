@@ -3,20 +3,22 @@ use axum::response::{IntoResponse, Response};
 use serde::Serialize;
 use tracing::debug;
 
+use crate::model;
+
 pub type Result<T> = core::result::Result<T, Error>;
 
 #[derive(Clone, Debug, Serialize, strum_macros::AsRefStr)]
 #[serde(tag = "type", content = "data")]
 pub enum Error {
+	ConfigMissingEnv(&'static str),
+	Model(model::Error),
+
 	LoginFail,
 
 	// -- Auth errors.
 	AuthFailNoAuthTokenCookie,
 	AuthFailTokenWrongFormat,
 	AuthFailCtxNotInRequestExt,
-
-	// -- Model errors.
-	TicketDeleteFailIdNotFound { id: u64 },
 }
 
 // region:    --- Error Boilerplate
@@ -57,11 +59,6 @@ impl Error {
 			| Self::AuthFailTokenWrongFormat
 			| Self::AuthFailCtxNotInRequestExt => {
 				(StatusCode::FORBIDDEN, ClientError::NO_AUTH)
-			}
-
-			// -- Model.
-			Self::TicketDeleteFailIdNotFound { .. } => {
-				(StatusCode::BAD_REQUEST, ClientError::INVALID_PARAMS)
 			}
 
 			// -- Fallback.
