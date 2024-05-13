@@ -5,6 +5,7 @@ use axum::http::{Method, Uri};
 use axum::response::{IntoResponse, Response};
 use axum::Json;
 use serde_json::json;
+use tracing::debug;
 use uuid::Uuid;
 
 pub async fn main_response_mapper(
@@ -13,7 +14,7 @@ pub async fn main_response_mapper(
 	req_method: Method,
 	res: Response,
 ) -> Response {
-	println!("->> {:<12} - main_response_mapper", "RES_MAPPER");
+	debug!("{:<12} - main_response_mapper", "RES_MAPPER");
 	let uuid = Uuid::new_v4();
 
 	// -- Get the eventual response error.
@@ -44,6 +45,5 @@ pub async fn main_response_mapper(
 	let _ =
 		log_request(uuid, req_method, uri, ctx, service_error, client_error).await;
 
-	println!();
 	error_response.unwrap_or(res)
 }

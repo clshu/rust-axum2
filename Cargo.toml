@@ -1,12 +1,12 @@
 [package]
-name = "rust-axum-intro"
+name = "rust-web-app"
 version = "0.1.0"
 edition = "2021"
 authors = ["Jeremy Chone <jeremy.chone@gmail.com>"]
 license = "MIT OR Apache-2.0"
 description = "Rust Axum Full Course code."
-homepage = "https://youtu.be/XZtlD_m59sM"
-repository = "https://github.com/rust-httpc-test"
+homepage = "https://www.youtube.com/watch?v=3cA_mk4vdWY&t=11s"
+repository = "https://github.com/rust10x/rust-web-app"
 
 [dependencies]
 tokio = { version = "1", features = ["full"] }
@@ -22,7 +22,10 @@ tower-cookies = "0.9"
 lazy-regex = "2"
 async-trait = "0.1"
 strum_macros = "0.24"
-uuid = {version = "1", features = ["v4","fast-rng",]}
+uuid = { version = "1", features = ["v4", "fast-rng"] }
+# tracing
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 
 
 [dev-dependencies]
